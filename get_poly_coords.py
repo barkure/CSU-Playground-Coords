@@ -139,7 +139,7 @@ angle = math.radians(22)
 rotate_points = np.array([rotate_point(point, angle, center1) for point in points])
 
 # 绘制闭合图形和离散点
-plt.figure(figsize=(12, 6))
+plt.figure(figsize=(10, 5))
 plt.subplot(1, 2, 1)
 plt.plot(points[:, 0], points[:, 1], 'b-', linewidth=1, label='Discrete Points')
 plt.scatter(points[:, 0], points[:, 1], color='red', s=5, label='Discrete Points')
