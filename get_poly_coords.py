@@ -1,6 +1,5 @@
 import math
 import numpy as np
-import matplotlib.pyplot as plt
 from pygcj.pygcj import GCJProj
 
 
@@ -60,7 +59,7 @@ def rotate_point(point, angle, center):
 # 创建操场多边形（中南大学新校区体育场副田径场）
 """
 以上侧（北方）的弧（此处当作半圆）的圆心为基准点，该点坐标为 (112.927251362, 28.160720451)
-基准点南偏东 22°（方位角为 158°），距离 79 米的点为下侧半圆的圆心,半圆半径均为 40 米
+基准点南偏东 22°（方位角为 158°），距离 82.5 米的点为下侧半圆的圆心,半圆半径均为 41.5 米
 
 然后凭感觉用直线连接两个半圆的端点，形成一个操场多边形
 
@@ -69,12 +68,12 @@ def rotate_point(point, angle, center):
 
 # 定义半圆的圆心和半径
 center1 = (0, 0)
-center2 = (0, -79)
-radius = 40
+center2 = (0, -82.5)
+radius = 41.5
 
 # 计算半圆的弧长和总的周长
 arc_length = math.pi * radius
-total_length = arc_length * 2 + 79 * 2
+total_length = arc_length * 2 + 80 * 2
 
 # 计算每个点的间距
 num_points = 100
@@ -99,8 +98,8 @@ for i in range(num_points):
 line_start = (center1[0] - radius, center1[1])
 line_end = (center2[0] - radius, center2[1])
 for i in range(num_points):
-    if current_distance < arc_length + 79:
-        t = (current_distance - arc_length) / 79
+    if current_distance < arc_length + 80:
+        t = (current_distance - arc_length) / 80
         x = line_start[0] + t * (line_end[0] - line_start[0])
         y = line_start[1] + t * (line_end[1] - line_start[1])
         points.append([x, y])
@@ -110,8 +109,8 @@ for i in range(num_points):
 
 # 生成下半圆上的点
 for i in range(num_points):
-    if current_distance < arc_length * 2 + 79:
-        angle = (current_distance - arc_length - 79) / radius
+    if current_distance < arc_length * 2 + 80:
+        angle = (current_distance - arc_length - 80) / radius
         x = center2[0] + radius * math.cos(angle + math.pi)
         y = center2[1] + radius * math.sin(angle + math.pi)
         points.append([x, y])
@@ -124,7 +123,7 @@ line_start = (center2[0] + radius, center2[1])
 line_end = (center1[0] + radius, center1[1])
 for i in range(num_points):
     if current_distance < total_length:
-        t = (current_distance - arc_length * 2 - 79) / 79
+        t = (current_distance - arc_length * 2 - 80) / 80
         x = line_start[0] + t * (line_end[0] - line_start[0])
         y = line_start[1] + t * (line_end[1] - line_start[1])
         points.append([x, y])
@@ -134,30 +133,9 @@ for i in range(num_points):
 
 points = np.array(points)
 
-# 以上侧半圆圆心为基准点，旋转 22°
-angle = math.radians(22)
+# 以上侧半圆圆心为基准点，旋转
+angle = math.radians(21.2)
 rotate_points = np.array([rotate_point(point, angle, center1) for point in points])
-
-# 绘制闭合图形和离散点
-plt.figure(figsize=(10, 5))
-plt.subplot(1, 2, 1)
-plt.plot(points[:, 0], points[:, 1], 'b-', linewidth=1, label='Discrete Points')
-plt.scatter(points[:, 0], points[:, 1], color='red', s=5, label='Discrete Points')
-plt.axis('equal')
-plt.grid(True)
-plt.xlabel('X (m)', fontsize=14, fontweight='bold')
-plt.ylabel('Y (m)', fontsize=14, fontweight='bold')
-
-# 绘制旋转后的图形
-plt.subplot(1, 2, 2)
-plt.plot(rotate_points[:, 0], rotate_points[:, 1], 'b-', linewidth=1, label='Discrete Points')
-plt.scatter(rotate_points[:, 0], rotate_points[:, 1], color='red', s=5, label='Discrete Points')
-plt.axis('equal')
-plt.grid(True)
-plt.xlabel('X (m)', fontsize=14, fontweight='bold')
-plt.ylabel('Y (m)', fontsize=14, fontweight='bold')
-
-plt.savefig('points.png')
 
 
 # 基准点经纬度坐标
